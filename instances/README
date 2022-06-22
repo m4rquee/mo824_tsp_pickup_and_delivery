@@ -1,0 +1,9 @@
+Format for digraphs:
+
+# DIGRAPH: (file.dig)
+nnodes   narcs         type
+   110     1000      digraph
+nodename posx posy
+...
+tail head weight
+...
