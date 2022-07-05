@@ -30,8 +30,38 @@
 using namespace lemon;
 using namespace lemon::dim2;
 
-const int lgfn = 4;
+const int lgfn = 8;
 const std::string lgf[lgfn] = {
+  "@nodes\n"
+  "label\n"
+  "@edges\n"
+  "     label\n",
+
+  "@nodes\n"
+  "label\n"
+  "0\n"
+  "@edges\n"
+  "     label\n",
+
+  "@nodes\n"
+  "label\n"
+  "0\n"
+  "1\n"
+  "@edges\n"
+  "     label\n"
+  "0 1  0\n",
+
+  "@nodes\n"
+  "label\n"
+  "0\n"
+  "1\n"
+  "2\n"
+  "@edges\n"
+  "     label\n"
+  "0 1  0\n"
+  "1 2  1\n"
+  "2 0  2\n",
+
   "@nodes\n"
   "label\n"
   "0\n"
@@ -136,8 +166,11 @@ void checkEmbedding(const Graph& graph, PE& pe) {
       ++face_num;
     }
   }
-  check(face_num + countNodes(graph) - countConnectedComponents(graph) ==
-        countEdges(graph) + 1, "Euler test does not passed");
+
+  if (face_num != 0) {
+    check(face_num + countNodes(graph) - countConnectedComponents(graph) ==
+          countEdges(graph) + 1, "Euler test does not passed");
+  }
 }
 
 void checkKuratowski(const Graph& graph, PE& pe) {
@@ -245,13 +278,29 @@ int main() {
     if (planar) {
       checkEmbedding(graph, pe);
 
-      PlanarDrawing<Graph> pd(graph);
-      pd.run(pe.embeddingMap());
-      checkDrawing(graph, pd);
+      {
+        PlanarDrawing<Graph> pd(graph);
+        pd.run(pe.embeddingMap());
+        checkDrawing(graph, pd);
+      }
 
-      PlanarColoring<Graph> pc(graph);
-      pc.runFiveColoring(pe.embeddingMap());
-      checkColoring(graph, pc, 5);
+      {
+        PlanarDrawing<Graph> pd(graph);
+        pd.run();
+        checkDrawing(graph, pd);
+      }
+
+      {
+        PlanarColoring<Graph> pc(graph);
+        pc.runFiveColoring(pe.embeddingMap());
+        checkColoring(graph, pc, 5);
+      }
+
+      {
+        PlanarColoring<Graph> pc(graph);
+        pc.runFiveColoring();
+        checkColoring(graph, pc, 5);
+      }
 
     } else {
       checkKuratowski(graph, pe);

@@ -20,7 +20,7 @@
 #include <lemon/lp_skeleton.h>
 #include "test_tools.h"
 #include <lemon/tolerance.h>
-
+#include <lemon/concept_check.h>
 #include <lemon/config.h>
 
 #ifdef LEMON_HAVE_GLPK
@@ -47,12 +47,22 @@ using namespace lemon;
 int countCols(LpBase & lp) {
   int count=0;
   for (LpBase::ColIt c(lp); c!=INVALID; ++c) ++count;
+#ifdef LEMON_CXX11
+  int cnt = 0;
+  for(auto c: lp.cols()) { cnt++; ::lemon::ignore_unused_variable_warning(c); }
+  check(count == cnt, "Wrong STL iterator");
+#endif
   return count;
 }
 
 int countRows(LpBase & lp) {
   int count=0;
   for (LpBase::RowIt r(lp); r!=INVALID; ++r) ++count;
+#ifdef LEMON_CXX11
+  int cnt = 0;
+  for(auto r: lp.rows()) { cnt++; ::lemon::ignore_unused_variable_warning(r); }
+  check(count == cnt, "Wrong STL iterator");
+#endif
   return count;
 }
 
@@ -329,6 +339,7 @@ void aTest(LpSolver & lp)
   check(lp.objCoeff(x1)==1,"First term should be 1 in the obj function!");
   check(lp.sense() == lp.MAX,"This is a maximization!");
   check(lp.coeff(upright,x1)==1,"The coefficient in question is 1!");
+  check(lp.coeff(upright,x2)==2,"The coefficient in question is 1!");
   check(lp.colLowerBound(x1)==0,
         "The lower bound for variable x1 should be 0.");
   check(lp.colUpperBound(x1)==LpSolver::INF,
@@ -414,6 +425,34 @@ void cloneTest()
   delete lpclone;
 }
 
+template<class LP>
+void rangeConstraintTest()
+{
+  LP lp;
+  // Add two columns (variables) to the problem
+  typename LP::Col x1 = lp.addCol();
+  typename LP::Col x2 = lp.addCol();
+  // Add rows (constraints) to the problem
+  lp.addRow(x1 - 5 <= x2);
+    lp.addRow(0 <= 2 * x1 + x2 <= 25);
+  
+  // Set lower and upper bounds for the columns (variables)
+  lp.colLowerBound(x1, 0);
+  lp.colUpperBound(x2, 10);
+  
+  // Specify the objective function
+  lp.max();
+  lp.obj(5 * x1 + 3 * x2);
+  
+  // Solve the problem using the underlying LP solver
+  lp.solve();
+  // Print the results
+  check(lp.primalType() == LP::OPTIMAL, "Optimal solution is not found");
+  check(lp.primal() <= 67.501 && lp.primal() >= 67.499, "Wrong objective value");
+  check(lp.primal(x1) <= 7.501 && lp.primal(x1) >= 7.499, "Wrong value for x1");
+  check(lp.primal(x2) <= 10.001 && lp.primal(x2) >= 9.999, "Wrong value for x2");
+}
+
 int main()
 {
   LpSkeleton lp_skel;
@@ -434,6 +473,7 @@ int main()
     lpTest(lp_glpk1);
     aTest(lp_glpk2);
     cloneTest<GlpkLp>();
+    rangeConstraintTest<GlpkLp>();
   }
 #endif
 
@@ -443,6 +483,7 @@ int main()
     lpTest(lp_cplex1);
     aTest(lp_cplex2);
     cloneTest<CplexLp>();
+    rangeConstraintTest<CplexLp>();
   } catch (CplexEnv::LicenseError& error) {
     check(false, error.what());
   }
@@ -454,6 +495,7 @@ int main()
     lpTest(lp_soplex1);
     aTest(lp_soplex2);
     cloneTest<SoplexLp>();
+    rangeConstraintTest<Soplex>();
   }
 #endif
 
@@ -463,6 +505,7 @@ int main()
     lpTest(lp_clp1);
     aTest(lp_clp2);
     cloneTest<ClpLp>();
+    rangeConstraintTest<ClpLp>();
   }
 #endif
 

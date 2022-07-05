@@ -1,6 +1,17 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-CMAKE_POLICY(SET CMP0048 OLD)
+IF(POLICY CMP0048) 
+  CMAKE_POLICY(SET CMP0048 OLD) 
+ENDIF(POLICY CMP0048)
+
+IF(POLICY CMP0043) 
+  CMAKE_POLICY(SET CMP0043 NEW)
+ENDIF(POLICY CMP0043)
+
+IF(POLICY CMP0026)
+  #This is for copying the dll's needed by glpk (in lp_test and mip_test)
+  CMAKE_POLICY(SET CMP0026 NEW)
+ENDIF(POLICY CMP0026)
 
 SET(PROJECT_NAME "LEMON")
 PROJECT(${PROJECT_NAME})
@@ -64,6 +75,10 @@ SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 FIND_PACKAGE(Doxygen)
 FIND_PACKAGE(Ghostscript)
 
+IF(WIN32)
+  SET(LEMON_WIN32 TRUE)
+ENDIF(WIN32)
+
 SET(LEMON_ENABLE_GLPK YES CACHE STRING "Enable GLPK solver backend.")
 SET(LEMON_ENABLE_ILOG YES CACHE STRING "Enable ILOG (CPLEX) solver backend.")
 SET(LEMON_ENABLE_COIN YES CACHE STRING "Enable COIN solver backend.")
@@ -71,37 +86,36 @@ SET(LEMON_ENABLE_SOPLEX YES CACHE STRING "Enable SoPlex solver backend.")
 
 IF(LEMON_ENABLE_GLPK) 
   FIND_PACKAGE(GLPK 4.33)
+  IF(GLPK_FOUND)
+    SET(LEMON_HAVE_LP TRUE)
+    SET(LEMON_HAVE_MIP TRUE)
+    SET(LEMON_HAVE_GLPK TRUE)
+  ENDIF(GLPK_FOUND)
 ENDIF(LEMON_ENABLE_GLPK)
 IF(LEMON_ENABLE_ILOG)
   FIND_PACKAGE(ILOG)
+  IF(ILOG_FOUND)
+    SET(LEMON_HAVE_LP TRUE)
+    SET(LEMON_HAVE_MIP TRUE)
+    SET(LEMON_HAVE_CPLEX TRUE)
+  ENDIF(ILOG_FOUND)
 ENDIF(LEMON_ENABLE_ILOG)
 IF(LEMON_ENABLE_COIN)
   FIND_PACKAGE(COIN)
+  IF(COIN_FOUND)
+    SET(LEMON_HAVE_LP TRUE)
+    SET(LEMON_HAVE_MIP TRUE)
+    SET(LEMON_HAVE_CLP TRUE)
+    SET(LEMON_HAVE_CBC TRUE)
+  ENDIF(COIN_FOUND)
 ENDIF(LEMON_ENABLE_COIN)
 IF(LEMON_ENABLE_SOPLEX)
   FIND_PACKAGE(SOPLEX)
+  IF(SOPLEX_FOUND)
+    SET(LEMON_HAVE_LP TRUE)
+    SET(LEMON_HAVE_SOPLEX TRUE)
+  ENDIF(SOPLEX_FOUND)
 ENDIF(LEMON_ENABLE_SOPLEX)
-
-IF(GLPK_FOUND)
-  SET(LEMON_HAVE_LP TRUE)
-  SET(LEMON_HAVE_MIP TRUE)
-  SET(LEMON_HAVE_GLPK TRUE)
-ENDIF(GLPK_FOUND)
-IF(ILOG_FOUND)
-  SET(LEMON_HAVE_LP TRUE)
-  SET(LEMON_HAVE_MIP TRUE)
-  SET(LEMON_HAVE_CPLEX TRUE)
-ENDIF(ILOG_FOUND)
-IF(COIN_FOUND)
-  SET(LEMON_HAVE_LP TRUE)
-  SET(LEMON_HAVE_MIP TRUE)
-  SET(LEMON_HAVE_CLP TRUE)
-  SET(LEMON_HAVE_CBC TRUE)
-ENDIF(COIN_FOUND)
-IF(SOPLEX_FOUND)
-  SET(LEMON_HAVE_LP TRUE)
-  SET(LEMON_HAVE_SOPLEX TRUE)
-ENDIF(SOPLEX_FOUND)
 
 IF(ILOG_FOUND)
   SET(DEFAULT_LP "CPLEX")
@@ -138,20 +152,36 @@ ELSE()
     "Default MIP solver backend (GLPK, CPLEX or CBC)")
 ENDIF()
 
+IF( ( ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") AND
+      ("${CMAKE_CXX_COMPILER_VERSION}" VERSION_GREATER_EQUAL "4.8") )
+    OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+    )
+  SET(LEMON_NO_UNUSED_LOCAL_TYPEDEF_WARNINGS TRUE)
+ENDIF()
 
 IF(DEFINED ENV{LEMON_CXX_WARNING})
   SET(CXX_WARNING $ENV{LEMON_CXX_WARNING})
 ELSE()
-  IF(CMAKE_COMPILER_IS_GNUCXX)
+  IF( ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+      OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+      )
     SET(CXX_WARNING "-Wall -W -Wunused -Wformat=2 -Wctor-dtor-privacy -Wnon-virtual-dtor -Wno-char-subscripts -Wwrite-strings -Wno-char-subscripts -Wreturn-type -Wcast-qual -Wcast-align -Wsign-promo -Woverloaded-virtual -fno-strict-aliasing -Wold-style-cast -Wno-unknown-pragmas")
+    SET(CMAKE_CXX_FLAGS_DEBUG CACHE STRING "-ggdb")
+    SET(CMAKE_C_FLAGS_DEBUG CACHE STRING "-ggdb")
+  ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+    SET(CXX_WARNING "-Wall -W -Wunused -Wformat=2 -Wnon-virtual-dtor -Wno-char-subscripts -Wwrite-strings -Wno-char-subscripts -Wreturn-type -Wcast-qual -Wsign-promo -Woverloaded-virtual -fno-strict-aliasing -Wno-unknown-pragmas")
     SET(CMAKE_CXX_FLAGS_DEBUG CACHE STRING "-ggdb")
     SET(CMAKE_C_FLAGS_DEBUG CACHE STRING "-ggdb")
   ELSEIF(MSVC)
     # This part is unnecessary 'casue the same is set by the lemon/core.h.
-    # Still keep it as an example.
-    SET(CXX_WARNING "/wd4250 /wd4355 /wd4503 /wd4800 /wd4996")
+    # Still kept as an example.
+
+    # SET(CXX_WARNING "/wd4250 /wd4267 /wd4355 /wd4503 /wd4800 /wd4996")
+
     # Suppressed warnings:
     # C4250: 'class1' : inherits 'class2::member' via dominance
+    # C4267: conversion from 'size_t' to 'type', possible loss of data
     # C4355: 'this' : used in base member initializer list
     # C4503: 'function' : decorated name length exceeded, name was truncated
     # C4800: 'type' : forcing value to bool 'true' or 'false'
@@ -166,35 +196,36 @@ SET(LEMON_CXX_WARNING_FLAGS ${CXX_WARNING} CACHE STRING "LEMON warning flags.")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LEMON_CXX_WARNING_FLAGS}")
 
 IF(MSVC)
+  SET( CMAKE_CXX_FLAGS "/bigobj ${CMAKE_CXX_FLAGS}")
   SET( CMAKE_CXX_FLAGS_MAINTAINER "/WX ${CMAKE_CXX_FLAGS_DEBUG}" CACHE STRING
-    "Flags used by the C++ compiler during maintainer builds."
+    "Flags used by the C++ compiler during maintainer builds." FORCE
     )
   SET( CMAKE_C_FLAGS_MAINTAINER "/WX ${CMAKE_CXX_FLAGS_DEBUG}" CACHE STRING
-    "Flags used by the C compiler during maintainer builds."
+    "Flags used by the C compiler during maintainer builds." FORCE
     )
   SET( CMAKE_EXE_LINKER_FLAGS_MAINTAINER
     "${CMAKE_EXE_LINKER_FLAGS_DEBUG}" CACHE STRING
-    "Flags used for linking binaries during maintainer builds."
+    "Flags used for linking binaries during maintainer builds." FORCE
     )
   SET( CMAKE_SHARED_LINKER_FLAGS_MAINTAINER
     "${CMAKE_SHARED_LINKER_FLAGS_DEBUG}" CACHE STRING
     "Flags used by the shared libraries linker during maintainer builds."
+     FORCE
     )
 ELSE()
   SET( CMAKE_CXX_FLAGS_MAINTAINER "-Werror -ggdb -O0" CACHE STRING
-    "Flags used by the C++ compiler during maintainer builds."
+    "Flags used by the C++ compiler during maintainer builds." FORCE
     )
   SET( CMAKE_C_FLAGS_MAINTAINER "-Werror -O0" CACHE STRING
-    "Flags used by the C compiler during maintainer builds."
+    "Flags used by the C compiler during maintainer builds." FORCE
     )
   SET( CMAKE_EXE_LINKER_FLAGS_MAINTAINER
     "${CMAKE_EXE_LINKER_FLAGS_DEBUG}" CACHE STRING
-    "Flags used for linking binaries during maintainer builds."
+    "Flags used for linking binaries during maintainer builds." FORCE
     )
   SET( CMAKE_SHARED_LINKER_FLAGS_MAINTAINER
     "${CMAKE_SHARED_LINKER_FLAGS_DEBUG}" CACHE STRING
-    "Flags used by the shared libraries linker during maintainer builds."
-    )
+    "Flags used by the shared libraries linker during maintainer builds." FORCE)
 ENDIF()
 
 MARK_AS_ADVANCED(
@@ -219,6 +250,10 @@ SET( CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
     "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel Maintainer."
     FORCE )
 
+SET_DIRECTORY_PROPERTIES(PROPERTIES
+  COMPILE_DEFINITIONS
+  $<$<OR:$<CONFIG:Debug>,$<CONFIG:Maintainer>>:LEMON_ENABLE_DEBUG>
+)
 
 INCLUDE(CheckTypeSize)
 CHECK_TYPE_SIZE("long long" LONG_LONG)
@@ -247,6 +282,14 @@ ELSEIF(LEMON_THREADING STREQUAL "Win32")
 ENDIF()
 
 ENABLE_TESTING()
+
+
+INCLUDE(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++11" LEMON_CXX11)
+IF(LEMON_CXX11)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+ENDIF()
+
 
 IF(${CMAKE_BUILD_TYPE} STREQUAL "Maintainer")
   ADD_CUSTOM_TARGET(check ALL COMMAND ${CMAKE_CTEST_COMMAND})

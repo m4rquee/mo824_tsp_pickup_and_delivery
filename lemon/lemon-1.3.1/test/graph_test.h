@@ -38,6 +38,27 @@ namespace lemon {
     }
     check(n==INVALID,"Wrong Node list linking.");
     check(countNodes(G)==cnt,"Wrong Node number.");
+
+#ifdef LEMON_CXX11
+    {
+      typename Graph::NodeIt n(G);
+      for(auto u: G.nodes())
+        {
+          check(n==u,"Wrong STL Node iterator.");
+          ++n;
+        }
+      check(n==INVALID,"Wrong STL Node iterator.");
+    }
+    {
+      typename Graph::NodeIt n(G);
+      for(typename Graph::Node u: G.nodes())
+        {
+          check(n==u,"Wrong STL Node iterator.");
+          ++n;
+        }
+      check(n==INVALID,"Wrong STL Node iterator.");
+    }
+#endif
   }
 
   template<class Graph>
@@ -56,6 +77,26 @@ namespace lemon {
     }
     check(n==INVALID,"Wrong red Node list linking.");
     check(countRedNodes(G)==cnt,"Wrong red Node number.");
+#ifdef LEMON_CXX11
+    {
+      typename Graph::RedNodeIt n(G);
+      for(auto u: G.redNodes())
+        {
+          check(n==u,"Wrong STL RedNode iterator.");
+          ++n;
+        }
+      check(n==INVALID,"Wrong STL RedNode iterator.");
+    }
+    {
+      typename Graph::RedNodeIt n(G);
+      for(typename Graph::RedNode u: G.redNodes())
+        {
+          check(n==u,"Wrong STL RedNode iterator.");
+          ++n;
+        }
+      check(n==INVALID,"Wrong STL RedNode iterator.");
+    }
+#endif
   }
 
   template<class Graph>
@@ -74,6 +115,27 @@ namespace lemon {
     }
     check(n==INVALID,"Wrong blue Node list linking.");
     check(countBlueNodes(G)==cnt,"Wrong blue Node number.");
+#ifdef LEMON_CXX11
+    {
+      typename Graph::BlueNodeIt n(G);
+      for(auto u: G.blueNodes())
+        {
+          check(n==u,"Wrong STL BlueNode iterator.");
+          ++n;
+        }
+      check(n==INVALID,"Wrong STL BlueNode iterator.");
+    }
+    {
+      typename Graph::BlueNodeIt n(G);
+      for(typename Graph::BlueNode u: G.blueNodes())
+        {
+          check(n==u,"Wrong STL BlueNode iterator.");
+          ++n;
+        }
+      check(n==INVALID,"Wrong STL BlueNode iterator.");
+    }
+#endif
+
   }
 
   template<class Graph>
@@ -90,6 +152,27 @@ namespace lemon {
     }
     check(e==INVALID,"Wrong Arc list linking.");
     check(countArcs(G)==cnt,"Wrong Arc number.");
+#ifdef LEMON_CXX11
+    {
+      typename Graph::ArcIt a(G);
+      for(auto e: G.arcs())
+        {
+          check(a==e,"Wrong STL Arc iterator.");
+          ++a;
+        }
+      check(a==INVALID,"Wrong STL Arc iterator.");
+    }
+    {
+      typename Graph::ArcIt a(G);
+      for(typename Graph::Arc e: G.arcs())
+        {
+          check(a==e,"Wrong STL Arc iterator.");
+          ++a;
+        }
+      check(a==INVALID,"Wrong STL Arc iterator.");
+    }
+#endif
+
   }
 
   template<class Graph>
@@ -105,6 +188,27 @@ namespace lemon {
     }
     check(e==INVALID,"Wrong OutArc list linking.");
     check(countOutArcs(G,n)==cnt,"Wrong OutArc number.");
+#ifdef LEMON_CXX11
+    {
+      typename Graph::OutArcIt a(G,n);
+      for(auto e: G.outArcs(n))
+        {
+          check(a==e,"Wrong STL OutArc iterator.");
+          ++a;
+        }
+      check(a==INVALID,"Wrong STL OutArc iterator.");
+    }
+    {
+      typename Graph::OutArcIt a(G,n);
+      for(typename Graph::Arc e: G.outArcs(n))
+        {
+          check(a==e,"Wrong STL OutArc iterator.");
+          ++a;
+        }
+      check(a==INVALID,"Wrong STL OutArc iterator.");
+    }
+#endif
+
   }
 
   template<class Graph>
@@ -120,6 +224,26 @@ namespace lemon {
     }
     check(e==INVALID,"Wrong InArc list linking.");
     check(countInArcs(G,n)==cnt,"Wrong InArc number.");
+#ifdef LEMON_CXX11
+    {
+      typename Graph::InArcIt a(G,n);
+      for(auto e: G.inArcs(n))
+        {
+          check(a==e,"Wrong STL InArc iterator.");
+          ++a;
+        }
+      check(a==INVALID,"Wrong STL InArc iterator.");
+    }
+    {
+      typename Graph::InArcIt a(G,n);
+      for(typename Graph::Arc e: G.inArcs(n))
+        {
+          check(a==e,"Wrong STL InArc iterator.");
+          ++a;
+        }
+      check(a==INVALID,"Wrong STL InArc iterator.");
+    }
+#endif
   }
 
   template<class Graph>
@@ -134,6 +258,27 @@ namespace lemon {
     }
     check(e==INVALID,"Wrong Edge list linking.");
     check(countEdges(G)==cnt,"Wrong Edge number.");
+#ifdef LEMON_CXX11
+    {
+      typename Graph::EdgeIt a(G);
+      for(auto e: G.edges())
+        {
+          check(a==e,"Wrong STL Edge iterator.");
+          ++a;
+        }
+      check(a==INVALID,"Wrong STL Edge iterator.");
+    }
+    {
+      typename Graph::EdgeIt a(G);
+      for(typename Graph::Edge e: G.edges())
+        {
+          check(a==e,"Wrong STL Edge iterator.");
+          ++a;
+        }
+      check(a==INVALID,"Wrong STL Edge iterator.");
+    }
+#endif
+
   }
 
   template<class Graph>
@@ -150,6 +295,27 @@ namespace lemon {
     }
     check(e==INVALID,"Wrong IncEdge list linking.");
     check(countIncEdges(G,n)==cnt,"Wrong IncEdge number.");
+#ifdef LEMON_CXX11
+    {
+      typename Graph::IncEdgeIt a(G,n);
+      for(auto e: G.incEdges(n))
+        {
+          check(a==e,"Wrong STL IncEdge iterator.");
+          ++a;
+        }
+      check(a==INVALID,"Wrong STL IncEdge iterator.");
+    }
+    {
+      typename Graph::IncEdgeIt a(G,n);
+      for(typename Graph::Edge e: G.incEdges(n))
+        {
+          check(a==e,"Wrong STL IncEdge iterator.");
+          ++a;
+        }
+      check(a==INVALID,"Wrong STL IncEdge iterator.");
+    }
+#endif
+
   }
 
   template <class Graph>

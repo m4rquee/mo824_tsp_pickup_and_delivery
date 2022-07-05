@@ -7,14 +7,14 @@
 #include <vector>
 
 class PickupDeliveryDecoder {
-  Pickup_Delivery_Instance &P;
+    Pickup_Delivery_Instance &P;
 
 public:
-  explicit PickupDeliveryDecoder(Pickup_Delivery_Instance &P);
-  ~PickupDeliveryDecoder();
+    explicit PickupDeliveryDecoder(Pickup_Delivery_Instance &P);
+    ~PickupDeliveryDecoder();
 
-  double decode(const std::vector<double> &chromosome) const;
-  void decode(const std::vector<double> &chromosome, DNodeVector &Sol) const;
+    double decode(const std::vector<double> &chromosome) const;
+    void decode(const std::vector<double> &chromosome, DNodeVector &Sol) const;
 };
 
-#endif // LAB_MC658_PICKUPDELIVERYDECODER_HPP
+#endif// LAB_MC658_PICKUPDELIVERYDECODER_HPP

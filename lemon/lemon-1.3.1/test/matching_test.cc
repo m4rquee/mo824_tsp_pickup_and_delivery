@@ -134,6 +134,9 @@ void checkMaxMatchingCompile()
   mat_test.startSparse();
   mat_test.startDense();
   mat_test.run();
+  mat_test.startSparse(false);
+  mat_test.startDense(false);
+  mat_test.run(false);
 
   const_mat_test.matchingSize();
   const_mat_test.matching(e);
@@ -402,12 +405,80 @@ int main() {
     graphReader(graph, lgfs).
       edgeMap("weight", weight).run();
 
+    int size;
     bool perfect;
     {
       MaxMatching<SmartGraph> mm(graph);
       mm.run();
       checkMatching(graph, mm);
+      size = mm.matchingSize();
       perfect = 2 * mm.matchingSize() == countNodes(graph);
+    }
+
+    {
+      MaxMatching<SmartGraph> mm(graph);
+      mm.init();
+      mm.startSparse();
+      checkMatching(graph, mm);
+      check(size == mm.matchingSize(), "Inconsistent matching size");
+    }
+
+    {
+      MaxMatching<SmartGraph> mm(graph);
+      mm.init();
+      mm.startDense();
+      checkMatching(graph, mm);
+      check(size == mm.matchingSize(), "Inconsistent matching size");
+    }
+
+    {
+      MaxMatching<SmartGraph> mm(graph);
+      mm.greedyInit();
+      mm.startSparse();
+      checkMatching(graph, mm);
+      check(size == mm.matchingSize(), "Inconsistent matching size");
+    }
+
+    {
+      MaxMatching<SmartGraph> mm(graph);
+      mm.greedyInit();
+      mm.startDense();
+      checkMatching(graph, mm);
+      check(size == mm.matchingSize(), "Inconsistent matching size");
+    }
+
+    {
+      MaxMatching<SmartGraph> mm(graph);
+      mm.run(false);
+      check(size == mm.matchingSize(), "Inconsistent max cardinality matching");
+    }
+
+    {
+      MaxMatching<SmartGraph> mm(graph);
+      mm.init();
+      mm.startSparse(false);
+      check(size == mm.matchingSize(), "Inconsistent matching size");
+    }
+
+    {
+      MaxMatching<SmartGraph> mm(graph);
+      mm.init();
+      mm.startDense(false);
+      check(size == mm.matchingSize(), "Inconsistent matching size");
+    }
+
+    {
+      MaxMatching<SmartGraph> mm(graph);
+      mm.greedyInit();
+      mm.startSparse(false);
+      check(size == mm.matchingSize(), "Inconsistent matching size");
+    }
+
+    {
+      MaxMatching<SmartGraph> mm(graph);
+      mm.greedyInit();
+      mm.startDense(false);
+      check(size == mm.matchingSize(), "Inconsistent matching size");
     }
 
     {

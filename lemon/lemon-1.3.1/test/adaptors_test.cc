@@ -145,12 +145,16 @@ void checkReverseDigraph() {
 
   // Check the conversion of nodes and arcs
   Digraph::Node nd = n4;
+  ::lemon::ignore_unused_variable_warning(nd);
   nd = n4;
   Adaptor::Node na = n1;
+  ::lemon::ignore_unused_variable_warning(na);
   na = n2;
   Digraph::Arc ad = a4;
+  ::lemon::ignore_unused_variable_warning(ad);
   ad = a5;
   Adaptor::Arc aa = a1;
+  ::lemon::ignore_unused_variable_warning(aa);
   aa = a2;
 }
 
@@ -269,12 +273,16 @@ void checkSubDigraph() {
 
   // Check the conversion of nodes and arcs
   Digraph::Node nd = n3;
+  ::lemon::ignore_unused_variable_warning(nd);
   nd = n3;
   Adaptor::Node na = n1;
+  ::lemon::ignore_unused_variable_warning(na);
   na = n2;
   Digraph::Arc ad = a3;
+  ::lemon::ignore_unused_variable_warning(ad);
   ad = a3;
   Adaptor::Arc aa = a1;
+  ::lemon::ignore_unused_variable_warning(aa);
   aa = a2;
 }
 
@@ -365,12 +373,16 @@ void checkFilterNodes1() {
 
   // Check the conversion of nodes and arcs
   Digraph::Node nd = n3;
+  ::lemon::ignore_unused_variable_warning(nd);
   nd = n3;
   Adaptor::Node na = n1;
+  ::lemon::ignore_unused_variable_warning(na);
   na = n2;
   Digraph::Arc ad = a3;
+  ::lemon::ignore_unused_variable_warning(ad);
   ad = a3;
   Adaptor::Arc aa = a1;
+  ::lemon::ignore_unused_variable_warning(aa);
   aa = a2;
 }
 
@@ -463,12 +475,16 @@ void checkFilterArcs() {
 
   // Check the conversion of nodes and arcs
   Digraph::Node nd = n3;
+  ::lemon::ignore_unused_variable_warning(nd);
   nd = n3;
   Adaptor::Node na = n1;
+  ::lemon::ignore_unused_variable_warning(na);
   na = n2;
   Digraph::Arc ad = a3;
+  ::lemon::ignore_unused_variable_warning(ad);
   ad = a3;
   Adaptor::Arc aa = a1;
+  ::lemon::ignore_unused_variable_warning(aa);
   aa = a2;
 }
 
@@ -574,12 +590,16 @@ void checkUndirector() {
 
   // Check the conversion of nodes and arcs/edges
   Digraph::Node nd = n3;
+  ::lemon::ignore_unused_variable_warning(nd);
   nd = n3;
   Adaptor::Node na = n1;
+  ::lemon::ignore_unused_variable_warning(na);
   na = n2;
   Digraph::Arc ad = e3;
+  ::lemon::ignore_unused_variable_warning(ad);
   ad = e3;
   Adaptor::Edge ea = a1;
+  ::lemon::ignore_unused_variable_warning(ea);
   ea = a2;
 }
 
@@ -734,10 +754,13 @@ void checkResidualDigraph() {
 
   // Check the conversion of nodes and arcs
   Digraph::Node nd = Adaptor::NodeIt(adaptor);
+  ::lemon::ignore_unused_variable_warning(nd);
   nd = ++Adaptor::NodeIt(adaptor);
   Adaptor::Node na = n1;
+  ::lemon::ignore_unused_variable_warning(na);
   na = n2;
   Digraph::Arc ad = Adaptor::ArcIt(adaptor);
+  ::lemon::ignore_unused_variable_warning(ad);
   ad = ++Adaptor::ArcIt(adaptor);
 }
 
@@ -987,12 +1010,16 @@ void checkSubGraph() {
 
   // Check the conversion of nodes and edges
   Graph::Node ng = n3;
+  ::lemon::ignore_unused_variable_warning(ng);
   ng = n4;
   Adaptor::Node na = n1;
+  ::lemon::ignore_unused_variable_warning(na);
   na = n2;
   Graph::Edge eg = e3;
+  ::lemon::ignore_unused_variable_warning(eg);
   eg = e4;
   Adaptor::Edge ea = e1;
+  ::lemon::ignore_unused_variable_warning(ea);
   ea = e2;
 }
 
@@ -1092,12 +1119,16 @@ void checkFilterNodes2() {
 
   // Check the conversion of nodes and edges
   Graph::Node ng = n3;
+  ::lemon::ignore_unused_variable_warning(ng);
   ng = n4;
   Adaptor::Node na = n1;
+  ::lemon::ignore_unused_variable_warning(na);
   na = n2;
   Graph::Edge eg = e3;
+  ::lemon::ignore_unused_variable_warning(eg);
   eg = e4;
   Adaptor::Edge ea = e1;
+  ::lemon::ignore_unused_variable_warning(ea);
   ea = e2;
 }
 
@@ -1198,12 +1229,16 @@ void checkFilterEdges() {
 
   // Check the conversion of nodes and edges
   Graph::Node ng = n3;
+  ::lemon::ignore_unused_variable_warning(ng);
   ng = n4;
   Adaptor::Node na = n1;
+  ::lemon::ignore_unused_variable_warning(na);
   na = n2;
   Graph::Edge eg = e3;
+  ::lemon::ignore_unused_variable_warning(eg);
   eg = e4;
   Adaptor::Edge ea = e1;
+  ::lemon::ignore_unused_variable_warning(ea);
   ea = e2;
 }
 
@@ -1356,12 +1391,16 @@ void checkOrienter() {
 
   // Check the conversion of nodes and arcs/edges
   Graph::Node ng = n3;
+  ::lemon::ignore_unused_variable_warning(ng);
   ng = n3;
   Adaptor::Node na = n1;
+  ::lemon::ignore_unused_variable_warning(na);
   na = n2;
   Graph::Edge eg = e3;
+  ::lemon::ignore_unused_variable_warning(eg);
   eg = e3;
   Adaptor::Arc aa = e1;
+  ::lemon::ignore_unused_variable_warning(aa);
   aa = e2;
 }
 

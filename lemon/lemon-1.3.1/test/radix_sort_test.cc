@@ -16,6 +16,8 @@
  *
  */
 
+#include <lemon/core.h>
+
 #include <lemon/time_measure.h>
 #include <lemon/smart_graph.h>
 #include <lemon/maps.h>

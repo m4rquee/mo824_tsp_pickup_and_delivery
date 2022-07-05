@@ -54,7 +54,7 @@ namespace lemon {
       T y;
 
       ///Default constructor
-      Point() {}
+      Point() : x(), y() {}
 
       ///Construct an instance from coordinates
       Point(T a, T b) : x(a), y(b) { }

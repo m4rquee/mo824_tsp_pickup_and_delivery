@@ -61,7 +61,7 @@ void solveAndCheck(MipSolver& mip, MipSolver::ProblemType stat,
   }
 }
 
-void aTest(MipSolver& mip)
+void aTest(MipSolver& mip, bool solve_empty=true)
 {
   //The following example is very simple
 
@@ -80,7 +80,8 @@ void aTest(MipSolver& mip)
   mip.max();
 
   //Unconstrained optimization
-  mip.solve();
+  if(solve_empty)
+    mip.solve();
   //Check it out!
 
   //Constraints
@@ -135,7 +136,11 @@ int main()
 #ifdef LEMON_HAVE_MIP
   {
     Mip mip1;
+#if LEMON_DEFAULT_MIP==LEMON_CBC_
+    aTest(mip1, false);
+#else
     aTest(mip1);
+#endif
     cloneTest<Mip>();
   }
 #endif
@@ -161,7 +166,7 @@ int main()
 #ifdef LEMON_HAVE_CBC
   {
     CbcMip mip1;
-    aTest(mip1);
+    aTest(mip1, false);
     cloneTest<CbcMip>();
   }
 #endif

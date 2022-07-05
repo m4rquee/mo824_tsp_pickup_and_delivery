@@ -1,19 +1,19 @@
 #ifndef LAB_MC658_PICKUP_DELIVERY_UTILS_HPP
 #define LAB_MC658_PICKUP_DELIVERY_UTILS_HPP
 
-#include "mygraphlib.h"
-#include "myutils.h"
+#include "mygraphlib.hpp"
 #include <chrono>
-#include <queue>
 #include <lemon/min_cost_arborescence.h>
+#include <queue>
 
 #define EPS_MIN 2.0
 #define EPS_MAX 2.0
 #define ELAPSED ((chrono::system_clock::now() - P.start).count() / 1E9)
-#define _NEW_UB_MESSAGE(SOL, MSG) {                                            \
-    PrintSolution(P, SOL, MSG);                                                \
-    printf("custo: %05.5f - %02.2f%% ótimo\n", UB, 100 * LB / UB);             \
-  }
+#define _NEW_UB_MESSAGE(SOL, MSG)                                      \
+    {                                                                  \
+        PrintSolution(P, SOL, MSG);                                    \
+        printf("custo: %05.5f - %02.2f%% ótimo\n", UB, 100 * LB / UB); \
+    }
 #define NEW_UB_MESSAGE(SOL) _NEW_UB_MESSAGE(SOL, "\nNovo UB.")
 
 using namespace lemon;
@@ -24,13 +24,13 @@ typedef vector<DNode> DNodeVector;
 
 // Compares two arcs based upon their weights:
 struct ArcCmp : public binary_function<Arc, Arc, bool> {
-  ArcValueMap &weight;
+    ArcValueMap &weight;
 
-  explicit ArcCmp(ArcValueMap &weight) : weight(weight) {}
+    explicit ArcCmp(ArcValueMap &weight) : weight(weight) {}
 
-  inline bool operator()(const Arc &x, const Arc &y) const {
-    return weight[x] > weight[y]; // acceding order
-  }
+    inline bool operator()(const Arc &x, const Arc &y) const {
+        return weight[x] > weight[y];// acceding order
+    }
 };
 
 typedef MinCostArborescence<Digraph, ArcValueMap> MinCostArb;
@@ -40,32 +40,32 @@ typedef priority_queue<Arc, vector<Arc>, ArcCmp> min_arc_heap;
 // Pickup_Delivery_Instance put all relevant information in one class.
 class Pickup_Delivery_Instance {
 public:
-  Pickup_Delivery_Instance(Digraph &graph, DNodeStringMap &vvname,
-                           DNodePosMap &posx, DNodePosMap &posy,
-                           ArcValueMap &eweight, DNode &sourcenode,
-                           DNode &targetnode, int &npairs, DNodeVector &pickup,
-                           DNodeVector &delivery,
-                           Digraph::NodeMap<DNode> &del_pickup,
-                           DNodeBoolMap &is_pickup, int &time_limit);
-  void start_counter();
+    Pickup_Delivery_Instance(Digraph &graph, DNodeStringMap &vvname,
+                             DNodePosMap &posx, DNodePosMap &posy,
+                             ArcValueMap &eweight, DNode &sourcenode,
+                             DNode &targetnode, int &npairs, DNodeVector &pickup,
+                             DNodeVector &delivery,
+                             Digraph::NodeMap<DNode> &del_pickup,
+                             DNodeBoolMap &is_pickup, int &time_limit);
+    void start_counter();
 
-  Digraph &g;
-  DNodeStringMap &vname;
-  DNodePosMap &px;
-  DNodePosMap &py;
-  ArcValueMap &weight;
-  const int nnodes;
-  DNode &source;
-  DNode &target;
-  const int npairs;
-  DNodeVector &pickup;
-  DNodeVector &delivery;
-  Digraph::NodeMap<DNode> &del_pickup;  // maps a delivery to its pickup
-  map<DNode, vector<Arc>> ordered_arcs; // out arcs of a node ordered by weight
-  DNodeBoolMap &is_pickup;
-  time_point start;
-  const int time_limit;
-  map<DNode, map<DNode, double>> weight_map; // used for fast weight lookup
+    Digraph &g;
+    DNodeStringMap &vname;
+    DNodePosMap &px;
+    DNodePosMap &py;
+    ArcValueMap &weight;
+    const int nnodes;
+    DNode &source;
+    DNode &target;
+    const int npairs;
+    DNodeVector &pickup;
+    DNodeVector &delivery;
+    Digraph::NodeMap<DNode> &del_pickup; // maps a delivery to its pickup
+    map<DNode, vector<Arc>> ordered_arcs;// out arcs of a node ordered by weight
+    DNodeBoolMap &is_pickup;
+    time_point start;
+    const int time_limit;
+    map<DNode, map<DNode, double>> weight_map;// used for fast weight lookup
 };
 
 void PrintInstanceInfo(Pickup_Delivery_Instance &P);
@@ -92,4 +92,4 @@ bool local_search(Pickup_Delivery_Instance &P, double &LB, double &UB,
 bool arborescence_heuristic(Pickup_Delivery_Instance &P, double &LB, double &UB,
                             DNodeVector &Sol, MinCostArb &solver);
 
-#endif // LAB_MC658_PICKUP_DELIVERY_UTILS_HPP
+#endif// LAB_MC658_PICKUP_DELIVERY_UTILS_HPP

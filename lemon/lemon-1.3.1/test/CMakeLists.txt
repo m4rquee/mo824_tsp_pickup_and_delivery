@@ -54,6 +54,7 @@ SET(TESTS
   time_measure_test
   tsp_test
   unionfind_test
+  vf2_test
 )
 
 IF(LEMON_HAVE_LP)
@@ -83,12 +84,10 @@ IF(LEMON_HAVE_LP)
   ADD_DEPENDENCIES(check lp_test)
 
   IF(WIN32 AND LEMON_HAVE_GLPK)
-    GET_TARGET_PROPERTY(TARGET_LOC lp_test LOCATION)
-    GET_FILENAME_COMPONENT(TARGET_PATH ${TARGET_LOC} PATH)
     ADD_CUSTOM_COMMAND(TARGET lp_test POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy ${GLPK_BIN_DIR}/glpk.dll ${TARGET_PATH}
-      COMMAND ${CMAKE_COMMAND} -E copy ${GLPK_BIN_DIR}/libltdl3.dll ${TARGET_PATH}
-      COMMAND ${CMAKE_COMMAND} -E copy ${GLPK_BIN_DIR}/zlib1.dll ${TARGET_PATH}
+      COMMAND ${CMAKE_COMMAND} -E copy ${GLPK_BIN_DIR}/glpk.dll $<TARGET_FILE_DIR:lp_test>
+      COMMAND ${CMAKE_COMMAND} -E copy ${GLPK_BIN_DIR}/libltdl3.dll $<TARGET_FILE_DIR:lp_test>
+      COMMAND ${CMAKE_COMMAND} -E copy ${GLPK_BIN_DIR}/zlib1.dll $<TARGET_FILE_DIR:lp_test>
     )
   ENDIF()
 

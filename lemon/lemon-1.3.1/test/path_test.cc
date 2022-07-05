@@ -108,6 +108,11 @@ public:
     checkBackAndFrontInsertablePath<ListPath<GR> >();
     checkBackInsertablePath<SimplePath<GR> >();
 
+    checkSubscriptOperator<Path<GR> >();
+    checkSubscriptOperator<SimplePath<GR> >();
+    checkSubscriptOperator<StaticPath<GR> >();
+    checkSubscriptOperator<ListPath<GR> >();
+
     checkListPathSplitAndSplice();
   }
 
@@ -271,6 +276,25 @@ private:
     check(pathSource(cgr, cp) == n4, "Wrong pathSource()");
     check(pathTarget(cgr, cp) == n3, "Wrong pathTarget()");
     check(checkPath(cgr, cp), "Wrong checkPath()");
+  }
+
+  template <typename P>
+  void checkSubscriptOperator() {
+    SimplePath<GR> p0;
+    p0.addBack(a1);
+    p0.addBack(a3);
+    p0.addBack(a2);
+    P p = p0;
+    check(!p.empty(), "Wrong empty()");
+    check(p.length() == 3, "Wrong length");
+    check(p.front() == a1, "Wrong front()");
+    check(p.back() == a2, "Wrong back()");
+    check(p.nth(0) == a1, "Wrong nth()");
+    check(p.nth(1) == a3, "Wrong nth()");
+    check(p.nth(2) == a2, "Wrong nth()");
+    check(p[0] == a1, "Wrong operator[]");
+    check(p[1] == a3, "Wrong operator[]");
+    check(p[2] == a2, "Wrong operator[]");
   }
 
   void checkListPathSplitAndSplice() {

@@ -20,6 +20,7 @@
 #include <lemon/list_graph.h>
 #include <lemon/smart_graph.h>
 #include <lemon/static_graph.h>
+#include <lemon/compact_graph.h>
 #include <lemon/full_graph.h>
 
 #include "test_tools.h"
@@ -338,6 +339,10 @@ void checkConcepts() {
     checkConcept<Digraph, StaticDigraph>();
     checkConcept<ClearableDigraphComponent<>, StaticDigraph>();
   }
+  { // Checking CompactDigraph
+    checkConcept<Digraph, CompactDigraph>();
+    checkConcept<ClearableDigraphComponent<>, CompactDigraph>();
+  }
   { // Checking FullDigraph
     checkConcept<Digraph, FullDigraph>();
   }
@@ -394,12 +399,13 @@ void checkDigraphValidityErase() {
   check(!g.valid(g.arcFromId(-1)), "Wrong validity check");
 }
 
+template <typename GR>
 void checkStaticDigraph() {
   SmartDigraph g;
-  SmartDigraph::NodeMap<StaticDigraph::Node> nref(g);
-  SmartDigraph::ArcMap<StaticDigraph::Arc> aref(g);
+  SmartDigraph::NodeMap<typename GR::Node> nref(g);
+  SmartDigraph::ArcMap<typename GR::Arc> aref(g);
 
-  StaticDigraph G;
+  GR G;
 
   checkGraphNodeList(G, 0);
   checkGraphArcList(G, 0);
@@ -555,7 +561,8 @@ void checkDigraphs() {
     checkDigraphValidity<SmartDigraph>();
   }
   { // Checking StaticDigraph
-    checkStaticDigraph();
+    checkStaticDigraph<StaticDigraph>();
+    checkStaticDigraph<CompactDigraph>();
   }
   { // Checking FullDigraph
     checkFullDigraph(8);

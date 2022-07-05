@@ -25,7 +25,7 @@
 Several modern languages provide a convenient way to refer the
 function parameters by name also when you call the function. It is
 especially comfortable in case of a function having tons of parameters
-with natural default values. Sadly, C++ lack this amenity.
+with natural default values. Sadly, C++ lacks this amenity.
 
 However, with a crafty trick and with some little
 inconvenience, it is possible to emulate is.

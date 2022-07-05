@@ -294,6 +294,14 @@ This group contains geometric data structures implemented in LEMON.
 */
 
 /**
+@defgroup matrices Matrices
+@ingroup auxdat
+\brief Two dimensional data storages implemented in LEMON.
+
+This group contains two dimensional data storages implemented in LEMON.
+*/
+
+/**
 @defgroup algs Algorithms
 \brief This group contains the several algorithms
 implemented in LEMON.
@@ -326,6 +334,10 @@ This group contains the algorithms for finding shortest paths in digraphs
    from a source node when arc lenghts can be either positive or negative,
    but the digraph should not contain directed cycles with negative total
    length.
+ - \ref FloydWarshall "Floyd-Warshall" and \ref Johnson "Johnson" algorithms
+   for solving the \e all-pairs \e shortest \e paths \e problem when arc
+   lenghts can be either positive or negative, but the digraph should
+   not contain directed cycles with negative total length.
  - \ref Suurballe A successive shortest path algorithm for finding
    arc-disjoint paths between two nodes having minimum total length.
 */
@@ -359,10 +371,20 @@ following optimization problem.
     \quad \forall u\in V\setminus\{s,t\} \f]
 \f[ 0 \leq f(uv) \leq cap(uv) \quad \forall uv\in A \f]
 
-\ref Preflow is an efficient implementation of Goldberg-Tarjan's
-preflow push-relabel algorithm \cite goldberg88newapproach for finding
-maximum flows. It also provides functions to query the minimum cut,
-which is the dual problem of maximum flow.
+LEMON contains several algorithms for solving maximum flow problems:
+- \ref EdmondsKarp Edmonds-Karp algorithm
+  \cite edmondskarp72theoretical.
+- \ref Preflow Goldberg-Tarjan's preflow push-relabel algorithm
+  \cite goldberg88newapproach.
+- \ref DinitzSleatorTarjan Dinitz's blocking flow algorithm with dynamic trees
+  \cite dinic70algorithm, \cite sleator83dynamic.
+- \ref GoldbergTarjan !Preflow push-relabel algorithm with dynamic trees
+  \cite goldberg88newapproach, \cite sleator83dynamic.
+
+In most cases the \ref Preflow algorithm provides the
+fastest method for computing a maximum flow. All implementations
+also provide functions to query the minimum cut, which is the dual
+problem of maximum flow.
 
 \ref Circulation is a preflow push-relabel algorithm implemented directly
 for finding feasible circulations, which is a somewhat different problem,
@@ -497,6 +519,16 @@ matching. The search can be constrained to find perfect or
 maximum cardinality matching.
 
 The matching algorithms implemented in LEMON:
+- \ref MaxBipartiteMatching Hopcroft-Karp augmenting path algorithm
+  for calculating maximum cardinality matching in bipartite graphs.
+- \ref PrBipartiteMatching Push-relabel algorithm
+  for calculating maximum cardinality matching in bipartite graphs.
+- \ref MaxWeightedBipartiteMatching
+  Successive shortest path algorithm for calculating maximum weighted
+  matching and maximum weighted bipartite matching in bipartite graphs.
+- \ref MinCostMaxBipartiteMatching
+  Successive shortest path algorithm for calculating minimum cost maximum
+  matching in bipartite graphs.
 - \ref MaxMatching Edmond's blossom shrinking algorithm for calculating
   maximum cardinality matching in general graphs.
 - \ref MaxWeightedMatching Edmond's blossom shrinking algorithm for calculating
@@ -526,6 +558,35 @@ like connectivity, bipartiteness, euler property, simplicity etc.
 
 \image html connected_components.png
 \image latex connected_components.eps "Connected components" width=\textwidth
+*/
+
+/**
+@defgroup graph_isomorphism Graph Isomorphism
+@ingroup algs
+\brief Algorithms for testing (sub)graph isomorphism
+
+This group contains algorithms for finding isomorph copies of a
+given graph in another one, or simply check whether two graphs are isomorphic.
+
+The formal definition of subgraph isomorphism is as follows.
+
+We are given two graphs, \f$G_1=(V_1,E_1)\f$ and \f$G_2=(V_2,E_2)\f$. A
+function \f$f:V_1\longrightarrow V_2\f$ is called \e mapping or \e
+embedding if \f$f(u)\neq f(v)\f$ whenever \f$u\neq v\f$.
+
+The standard <em>Subgraph Isomorphism Problem (SIP)</em> looks for a
+mapping with the property that whenever \f$(u,v)\in E_1\f$, then
+\f$(f(u),f(v))\in E_2\f$.
+
+In case of <em>Induced Subgraph Isomorphism Problem (ISIP)</em> one
+also requires that if \f$(u,v)\not\in E_1\f$, then \f$(f(u),f(v))\not\in
+E_2\f$
+
+In addition, the graph nodes may be \e labeled, i.e. we are given two
+node labelings \f$l_1:V_1\longrightarrow L\f$ and \f$l_2:V_2\longrightarrow
+L\f$ and we require that \f$l_1(u)=l_2(f(u))\f$ holds for all nodes \f$u \in
+G_1\f$.
+
 */
 
 /**
@@ -618,6 +679,23 @@ high-level interface.
 
 The currently supported solvers are \cite glpk, \cite clp, \cite cbc,
 \cite cplex, \cite soplex.
+*/
+
+/**
+@defgroup lp_utils Tools for Lp and Mip Solvers
+@ingroup lp_group
+\brief Helper tools to the Lp and Mip solvers.
+
+This group adds some helper tools to general optimization framework
+implemented in LEMON.
+*/
+
+/**
+@defgroup metah Metaheuristics
+@ingroup gen_opt_group
+\brief Metaheuristics for LEMON library.
+
+This group contains some metaheuristic optimization tools.
 */
 
 /**
