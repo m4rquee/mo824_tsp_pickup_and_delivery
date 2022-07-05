@@ -107,7 +107,7 @@ void translate_sol(Pickup_Delivery_Instance &P, DNodeVector &Sol,
                 }
 }
 
-bool Lab3(Pickup_Delivery_Instance &P, double &LB, double &UB, DNodeVector &Sol) {
+bool solve(Pickup_Delivery_Instance &P, double &LB, double &UB, DNodeVector &Sol) {
     P.start_counter();
     bool improved = arb_heuristic(P, LB, UB, Sol);
 
@@ -254,11 +254,11 @@ int main(int argc, char *argv[]) {
     DNodeVector Solucao(P.nnodes);
 
     try {
-        bool melhorou = Lab3(P, LB, UB, Solucao);
+        bool melhorou = solve(P, LB, UB, Solucao);
 
         if (melhorou) {
-            ViewPickupDeliverySolution(P, LB, UB, Solucao, "Solucao do Lab.");
-            PrintSolution(P, Solucao, "\nSolucao do Lab3.");
+            ViewPickupDeliverySolution(P, LB, UB, Solucao, "Solucao obtida.");
+            PrintSolution(P, Solucao, "Solucao obtida.");
             cout << "custo: " << UB << endl;
         }
     } catch (std::exception &e) {

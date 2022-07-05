@@ -24,7 +24,7 @@ inline void genArbLB(Pickup_Delivery_Instance &P, double &LB) {
     LB = max(LB, arb_solver.arborescenceCost());
 }
 
-bool Lab2(Pickup_Delivery_Instance &P, double &LB, double &UB, DNodeVector &Sol) {
+bool solve(Pickup_Delivery_Instance &P, double &LB, double &UB, DNodeVector &Sol) {
     bool improved = false;
     genArbLB(P, LB);
 
@@ -176,11 +176,11 @@ int main(int argc, char *argv[]) {
 
     DNodeVector Solucao(P.nnodes);
 
-    bool melhorou = Lab2(P, LB, UB, Solucao);
+    bool melhorou = solve(P, LB, UB, Solucao);
 
     if (melhorou) {
-        ViewPickupDeliverySolution(P, LB, UB, Solucao, "Solucao do Lab.");
-        PrintSolution(P, Solucao, "\nSolucao do Lab2.");
+        ViewPickupDeliverySolution(P, LB, UB, Solucao, "Solucao obtida.");
+        PrintSolution(P, Solucao, "Solucao obtida.");
         cout << "custo: " << UB << endl;
     }
     return 0;

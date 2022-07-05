@@ -132,7 +132,7 @@ bool exact_solution(Pickup_Delivery_Instance &P, double &LB, double &UB,
     return improved;
 }
 
-bool Lab1(Pickup_Delivery_Instance &P, double &LB, double &UB, DNodeVector &Sol) {
+bool solve(Pickup_Delivery_Instance &P, double &LB, double &UB, DNodeVector &Sol) {
     P.start_counter();// fixes the start time point
 
     // Generates the arborescence that will guide the route creation:
@@ -210,11 +210,11 @@ int main(int argc, char *argv[]) {
 
     DNodeVector Solucao;
 
-    bool melhorou = Lab1(P, LB, UB, Solucao);
+    bool melhorou = solve(P, LB, UB, Solucao);
 
     if (melhorou) {
-        ViewPickupDeliverySolution(P, LB, UB, Solucao, "Solucao do Lab.");
-        PrintSolution(P, Solucao, "Solucao do Lab1.");
+        ViewPickupDeliverySolution(P, LB, UB, Solucao, "Solucao obtida.");
+        PrintSolution(P, Solucao, "Solucao obtida.");
         cout << "custo: " << UB << endl;
     }
     return 0;
