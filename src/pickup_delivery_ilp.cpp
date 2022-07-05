@@ -264,6 +264,9 @@ int main(int argc, char *argv[]) {
     } catch (std::exception &e) {
         cerr << "\nException: " << e.what() << endl;
         return 1;
+    }  catch (GRBException &e) {
+        cerr << "\nGRBException: " << e.getMessage() << endl;
+        return 1;
     }
     return 0;
 }

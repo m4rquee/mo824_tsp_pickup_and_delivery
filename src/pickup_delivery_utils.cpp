@@ -112,7 +112,7 @@ bool ReadPickupDeliveryDigraph(const string &filename, Digraph &g,
     delivery.resize(npairs);
     int i = 0;
     for (DNodeIt v(g); v != INVALID; ++v) {
-        DN[i] = v;
+        DN[n - i - 1] = v;
         i++;
     }
 
