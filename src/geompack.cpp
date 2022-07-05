@@ -1,14 +1,14 @@
-# include <cstdlib>
-# include <iostream>
-# include <iomanip>
-# include <fstream>
-# include <cmath>
-# include <ctime>
-# include <cstring>
+#include <cmath>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 
 using namespace std;
 
-# include "geompack.h"
+#include "geompack.hpp"
 
 //****************************************************************************80
 
@@ -1190,7 +1190,7 @@ int lrline ( double xu, double yu, double xv1, double yv1, double xv2,
   double tol;
   double tolabs;
   int value=0;
-  
+
   tol = 100.0 * r8_epsilon ( );
 
   dx = xv2 - xv1;

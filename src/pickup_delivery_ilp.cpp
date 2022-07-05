@@ -4,7 +4,6 @@
 #include <gurobi_c++.h>
 #include <iostream>
 #include <lemon/list_graph.h>
-#include <solver.h>
 #include <string>
 
 int LAZY_ADD = INT32_MAX; // saves memory by limiting the calls to addLazy

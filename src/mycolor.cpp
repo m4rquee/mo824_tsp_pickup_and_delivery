@@ -5,10 +5,10 @@
 //
 // Send comments/corrections to Flavio K. Miyazawa
 //
-#include "myutils.h"
-#include "mycolor.h"
+#include "mycolor.hpp"
+#include "myutils.hpp"
 
-ColorClass ColorG; // As a global variable 
+ColorClass ColorG;// As a global variable
 
 int color2int(colorelement c){
   return(c.rgb_red*255*255+c.rgb_green*255+c.rgb_blue);}
