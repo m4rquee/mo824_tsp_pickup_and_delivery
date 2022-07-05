@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.21)
 
 project(PROJ-MO824
         VERSION 1.0
         LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 # Set a default build type if none was specified
 set(default_build_type "Release")
@@ -43,4 +43,4 @@ add_executable(pickup_delivery_ilp src/pickup_delivery_ilp.cpp)
 target_link_libraries(pickup_delivery_ilp m)
 target_link_libraries(pickup_delivery_ilp pthread)
 target_link_libraries(pickup_delivery_ilp graph_utils)
-target_link_libraries(pickup_delivery_ilp gurobi_c++ gurobi91)
+target_link_libraries(pickup_delivery_ilp gurobi_c++ gurobi95)
