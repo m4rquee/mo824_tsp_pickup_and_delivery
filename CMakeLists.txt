@@ -31,8 +31,11 @@ set(CMAKE_CXX_FLAGS "-m64 -Ofast -Wall -Wunused-local-typedefs -lemon -fopenmp")
 # Target executable and linking
 add_executable(pickup_delivery_branch_and_bound src/pickup_delivery_branch_and_bound.cpp)
 target_link_libraries(pickup_delivery_branch_and_bound m)
-target_link_libraries(pickup_delivery_branch_and_bound pthread)
 target_link_libraries(pickup_delivery_branch_and_bound graph_utils)
+
+add_executable(pickup_delivery_heuristic src/pickup_delivery_heuristic.cpp)
+target_link_libraries(pickup_delivery_heuristic m)
+target_link_libraries(pickup_delivery_heuristic graph_utils)
 
 add_executable(pickup_delivery_brkga src/pickup_delivery_brkga.cpp src/PickupDeliveryDecoder.cpp)
 target_link_libraries(pickup_delivery_brkga m)
