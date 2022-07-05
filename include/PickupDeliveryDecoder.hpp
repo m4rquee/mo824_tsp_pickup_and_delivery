@@ -1,5 +1,5 @@
-#ifndef LAB_MC658_PICKUPDELIVERYDECODER_HPP
-#define LAB_MC658_PICKUPDELIVERYDECODER_HPP
+#ifndef PICKUPDELIVERYDECODER_DEFINE
+#define PICKUPDELIVERYDECODER_DEFINE
 
 #include "pickup_delivery_utils.hpp"
 #include <algorithm>
@@ -17,4 +17,4 @@ public:
     void decode(const std::vector<double> &chromosome, DNodeVector &Sol) const;
 };
 
-#endif// LAB_MC658_PICKUPDELIVERYDECODER_HPP
+#endif// PICKUPDELIVERYDECODER_DEFINE

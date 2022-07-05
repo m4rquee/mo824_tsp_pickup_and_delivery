@@ -1,5 +1,5 @@
-#ifndef LAB_MC658_PICKUP_DELIVERY_UTILS_HPP
-#define LAB_MC658_PICKUP_DELIVERY_UTILS_HPP
+#ifndef PICKUP_DELIVERY_UTILS_DEFINE
+#define PICKUP_DELIVERY_UTILS_DEFINE
 
 #include "mygraphlib.hpp"
 #include <chrono>
@@ -92,4 +92,4 @@ bool local_search(Pickup_Delivery_Instance &P, double &LB, double &UB,
 bool arborescence_heuristic(Pickup_Delivery_Instance &P, double &LB, double &UB,
                             DNodeVector &Sol, MinCostArb &solver);
 
-#endif// LAB_MC658_PICKUP_DELIVERY_UTILS_HPP
+#endif// PICKUP_DELIVERY_UTILS_DEFINE
