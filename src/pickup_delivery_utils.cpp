@@ -5,7 +5,7 @@ Pickup_Delivery_Instance::Pickup_Delivery_Instance(
         DNodePosMap &posy, ArcValueMap &eweight, DNode &sourcenode,
         DNode &targetnode, int &vnpairs, DNodeVector &vpickup,
         DNodeVector &vdelivery, Digraph::NodeMap<DNode> &del_pickup,
-        DNodeBoolMap &is_pickup, int &time_limit)
+        DNodeBoolMap &is_pickup, int time_limit)
     : g(graph), vname(vvname), px(posx), py(posy), weight(eweight),
       nnodes(2 * vnpairs + 2), source(sourcenode), target(targetnode),
       npairs(vnpairs), pickup(vpickup), delivery(vdelivery),
@@ -295,7 +295,7 @@ void _arborescence_transversal(Pickup_Delivery_Instance &P, MinCostArb &solver,
 
     // Choose the min arc giving preference to the restricted one:
     DNode &nextNode = min_next;
-    double eps = EPS_MIN + (EPS_MAX - EPS_MIN) * pos / (2 * P.npairs - 1);// linear from min to max
+    double eps = P.eps_min + (P.eps_max - P.eps_min) * pos / (2 * P.npairs - 1);// linear from min to max
     if (min_cost_arb != MY_INF && min_cost_arb <= min_cost * eps)
         nextNode = min_next_arb;
     _arborescence_transversal(P, solver, Sol, nextNode, visited, p_visited, ++pos);

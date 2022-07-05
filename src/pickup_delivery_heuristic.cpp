@@ -6,8 +6,6 @@
 #include <string>
 
 bool solve(Pickup_Delivery_Instance &P, double &LB, double &UB, DNodeVector &Sol) {
-    P.start_counter();// fixes the start time point
-
     // Generates the arborescence that will guide the route creation:
     MinCostArb arb_solver(P.g, P.weight);
     arb_solver.run(P.source);// root the arborescence in the source
@@ -23,7 +21,6 @@ bool solve(Pickup_Delivery_Instance &P, double &LB, double &UB, DNodeVector &Sol
 }
 
 int main(int argc, char *argv[]) {
-    int maxtime;
     Digraph g;// graph declaration
     string digraph_filename, source_node_name, target_node_name;
     DNodeStringMap vname(g); // name of graph nodes
@@ -45,20 +42,19 @@ int main(int argc, char *argv[]) {
              << "Projeto de MO824: Rota com coleta e entrega de peso minimo;"
              << endl
              << "Usage: " << argv[0]
-             << "  <pickup_delivery_digraph_filename> <maximum_time_sec>" << endl
+             << "  <pickup_delivery_digraph_filename> <epsilon>" << endl
              << endl;
         cout << "Example:" << endl
              << "\t" << argv[0] << " "
-             << getpath(argv[0]) + "../instances/pickup_delivery_5.dig 10" << endl
+             << getpath(argv[0]) + "../instances/pickup_delivery_5.dig 2" << endl
              << endl
              << "\t" << argv[0] << " "
-             << getpath(argv[0]) + "../instances/pickup_delivery_10.dig 100" << endl
+             << getpath(argv[0]) + "../instances/pickup_delivery_10.dig 0.5" << endl
              << endl;
         exit(0);
     }
 
     digraph_filename = argv[1];
-    maxtime = atoi(argv[2]);
     double LB = 0, UB = MY_INF;// considere MY_INF como infinito.
     if (argc >= 4)
         LB = atof(argv[3]);
@@ -76,8 +72,9 @@ int main(int argc, char *argv[]) {
     }
 
     Pickup_Delivery_Instance P(g, vname, px, py, weight, source, target, npairs,
-                               pickup, delivery, del_pickup, is_pickup, maxtime);
+                               pickup, delivery, del_pickup, is_pickup, -1);
     PrintInstanceInfo(P);
+    P.eps_min = P.eps_max = atof(argv[2]);
 
     DNodeVector Solucao;
 

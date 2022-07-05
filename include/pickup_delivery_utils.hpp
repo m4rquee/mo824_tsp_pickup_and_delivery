@@ -6,8 +6,6 @@
 #include <lemon/min_cost_arborescence.h>
 #include <queue>
 
-#define EPS_MIN 2.0
-#define EPS_MAX 2.0
 #define ELAPSED ((chrono::system_clock::now() - P.start).count() / 1E9)
 #define _NEW_UB_MESSAGE(SOL, MSG)                                      \
     {                                                                  \
@@ -34,7 +32,7 @@ struct ArcCmp : public binary_function<Arc, Arc, bool> {
 };
 
 typedef MinCostArborescence<Digraph, ArcValueMap> MinCostArb;
-typedef priority_queue<double, vector<double>, greater<double>> min_heap;
+typedef priority_queue<double, vector<double>, greater<>> min_heap;
 typedef priority_queue<Arc, vector<Arc>, ArcCmp> min_arc_heap;
 
 // Pickup_Delivery_Instance put all relevant information in one class.
@@ -46,9 +44,10 @@ public:
                              DNode &targetnode, int &npairs, DNodeVector &pickup,
                              DNodeVector &delivery,
                              Digraph::NodeMap<DNode> &del_pickup,
-                             DNodeBoolMap &is_pickup, int &time_limit);
+                             DNodeBoolMap &is_pickup, int time_limit);
     void start_counter();
 
+    double eps_min = 2.0, eps_max = 2.0;
     Digraph &g;
     DNodeStringMap &vname;
     DNodePosMap &px;
