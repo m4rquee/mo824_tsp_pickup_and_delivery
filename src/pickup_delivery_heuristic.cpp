@@ -11,11 +11,14 @@ bool solve(Pickup_Delivery_Instance &P, double &LB, double &UB, DNodeVector &Sol
     arb_solver.run(P.source);// root the arborescence in the source
     // As a spanning digraph rooted at the source this is itself a LB:
     LB = max(LB, arb_solver.arborescenceCost());
+    cerr << LB;
 
     bool improved = arborescence_heuristic(P, LB, UB, Sol, arb_solver);
+    cerr << ' ' << UB;
 
     if (LB != UB)// if can improve
         improved |= local_search(P, LB, UB, Sol);
+    cerr << ' ' << UB;
 
     return improved;
 }
@@ -33,8 +36,6 @@ int main(int argc, char *argv[]) {
     vector<DNode> V;
     Digraph::NodeMap<DNode> del_pickup(g);// map a delivery to it's pickup
     DNodeBoolMap is_pickup(g, false);     // used to quickly check if a node is a pickup
-    int seed = 0;
-    srand48(seed);
 
     set_pdfreader("xdg-open");// the Linux will choose the default one
     if (argc < 3) {
@@ -72,7 +73,7 @@ int main(int argc, char *argv[]) {
     }
 
     Pickup_Delivery_Instance P(g, vname, px, py, weight, source, target, npairs,
-                               pickup, delivery, del_pickup, is_pickup, -1);
+                               pickup, delivery, del_pickup, is_pickup, INFINITY);
     PrintInstanceInfo(P);
     P.eps_min = P.eps_max = atof(argv[2]);
 
@@ -81,7 +82,6 @@ int main(int argc, char *argv[]) {
     bool melhorou = solve(P, LB, UB, Solucao);
 
     if (melhorou) {
-        ViewPickupDeliverySolution(P, LB, UB, Solucao, "Solucao obtida.");
         PrintSolution(P, Solucao, "Solucao obtida.");
         cout << "custo: " << UB << endl;
     }
