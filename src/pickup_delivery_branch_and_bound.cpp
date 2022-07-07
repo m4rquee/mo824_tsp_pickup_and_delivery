@@ -165,8 +165,6 @@ int main(int argc, char *argv[]) {
     vector<DNode> V;
     Digraph::NodeMap<DNode> del_pickup(g);// map a delivery to it's pickup
     DNodeBoolMap is_pickup(g, false);     // used to quickly check if a node is a pickup
-    int seed = 0;
-    srand48(seed);
 
     set_pdfreader("xdg-open");// the Linux will choose the default one
     if (argc < 3) {
@@ -212,8 +210,10 @@ int main(int argc, char *argv[]) {
 
     bool melhorou = solve(P, LB, UB, Solucao);
 
+    cerr << LB << ' ' << UB;
+
     if (melhorou) {
-        ViewPickupDeliverySolution(P, LB, UB, Solucao, "Solucao obtida.");
+        // ViewPickupDeliverySolution(P, LB, UB, Solucao, "Solucao obtida.");
         PrintSolution(P, Solucao, "Solucao obtida.");
         cout << "custo: " << UB << endl;
     }

@@ -120,6 +120,7 @@ bool solve(Pickup_Delivery_Instance &P, double &LB, double &UB, DNodeVector &Sol
     GRBModel model = GRBModel(*env);
     model.set(GRB_StringAttr_ModelName, "Pickup Delivery Route");
     model.set(GRB_IntAttr_ModelSense, GRB_MINIMIZE);
+    model.set(GRB_IntParam_Seed, 42);
 
     // ILP solver parameters: ----------------------------------------------------
     if (P.npairs >= 100) {// reduce memory usage
@@ -172,7 +173,7 @@ bool solve(Pickup_Delivery_Instance &P, double &LB, double &UB, DNodeVector &Sol
     SubCycleElim cb(P, x_e);
     model.setCallback(&cb);
     cout << "-> arcs only between adjacent nodes - adding a callback" << endl;
-    cout << "-> other - " << 2 << " constrs" << endl;
+    cout << "-> the source is the first and the target is the last node - " << 2 << " constrs" << endl;
 
     // ILP solving: --------------------------------------------------------------
     model.optimize();                                // trys to solve optimally within the time limit
@@ -209,7 +210,6 @@ int main(int argc, char *argv[]) {
     vector<DNode> V;
     Digraph::NodeMap<DNode> del_pickup(g);// map a delivery to it's pickup
     DNodeBoolMap is_pickup(g, false);     // used to quickly check if a node is a pickup
-    srand48(seed);
 
     set_pdfreader("xdg-open");// the Linux will choose the default one
     if (argc < 3) {
@@ -256,15 +256,17 @@ int main(int argc, char *argv[]) {
     try {
         bool melhorou = solve(P, LB, UB, Solucao);
 
+        cerr << LB << ' ' << UB;
+
         if (melhorou) {
-            ViewPickupDeliverySolution(P, LB, UB, Solucao, "Solucao obtida.");
+            // ViewPickupDeliverySolution(P, LB, UB, Solucao, "Solucao obtida.");
             PrintSolution(P, Solucao, "Solucao obtida.");
             cout << "custo: " << UB << endl;
         }
     } catch (std::exception &e) {
         cerr << "\nException: " << e.what() << endl;
         return 1;
-    }  catch (GRBException &e) {
+    } catch (GRBException &e) {
         cerr << "\nGRBException: " << e.getMessage() << endl;
         return 1;
     }

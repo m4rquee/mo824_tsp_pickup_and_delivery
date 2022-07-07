@@ -8,14 +8,14 @@
 #include <lemon/list_graph.h>
 #include <string>
 
-const long unsigned seed = 0;// seed to the random number generator
-const double pe = 0.20;      // fraction of population to be the elite-set
-const double pm = 0.10;      // fraction of population to be replaced by mutants
-const double rhoe = 0.70;    // probability that offspring inherit an allele from elite parent
-const unsigned I = 3;        // number of independent populations
-const unsigned MAXT = 4;     // number of threads for parallel decoding
-const unsigned X_NUMBER = 2; // exchange top 2 best
-const unsigned K_MAX = 1500; // maximum value for the restart(k) strategy
+const long unsigned seed = (unsigned int) time(nullptr);// seed to the random number generator
+const double pe = 0.20;                                 // fraction of population to be the elite-set
+const double pm = 0.10;                                 // fraction of population to be replaced by mutants
+const double rhoe = 0.70;                               // probability that offspring inherit an allele from elite parent
+const unsigned I = 3;                                   // number of independent populations
+const unsigned MAXT = 4;                                // number of threads for parallel decoding
+const unsigned X_NUMBER = 2;                            // exchange top 2 best
+const unsigned K_MAX = 1500;                            // maximum value for the restart(k) strategy
 
 inline void genArbLB(Pickup_Delivery_Instance &P, double &LB) {
     MinCostArb arb_solver(P.g, P.weight);// generates a min arborescence to derive a LB
@@ -42,16 +42,8 @@ bool solve(Pickup_Delivery_Instance &P, double &LB, double &UB, DNodeVector &Sol
          << endl;
 
     // Breaks the loop after MAX_UNCHANGED unimproved check(s):
-    const unsigned MAX_UNCHANGED = P.npairs == 5 ? 1 : P.npairs == 6 ? 8
-                                               : P.npairs == 7       ? 3
-                                               : P.npairs <= 9       ? 180
-                                                                     :// for small instances
-                                                       P.npairs == 10 ? 20
-                                                                            :// for 10 pickups
-                                                       UINT_MAX;             // the rest stops by time
-    const unsigned MAX_GENS =
-            P.npairs >= 15 ? UINT_MAX :// on big instances limit only by time
-                    500000;            // run for up to 500000 gens
+    const unsigned MAX_UNCHANGED = UINT_MAX;// stops by time only
+    const unsigned MAX_GENS = UINT_MAX;
     // Exchange best individuals at every X_INTVL generations:
     const unsigned X_INTVL = P.npairs > 100 ? 50 : 100;
     cout << "\tunchanged checks before break: MAX_UNCHANGED = " << MAX_UNCHANGED << endl;
@@ -132,7 +124,6 @@ int main(int argc, char *argv[]) {
     vector<DNode> V;
     Digraph::NodeMap<DNode> del_pickup(g);// map a delivery to it's pickup
     DNodeBoolMap is_pickup(g, false);     // used to quickly check if a node is a pickup
-    srand48(seed);
 
     set_pdfreader("xdg-open");// the Linux will choose the default one
     if (argc < 3) {
@@ -178,8 +169,10 @@ int main(int argc, char *argv[]) {
 
     bool melhorou = solve(P, LB, UB, Solucao);
 
+    cerr << LB << ' ' << UB;
+
     if (melhorou) {
-        ViewPickupDeliverySolution(P, LB, UB, Solucao, "Solucao obtida.");
+        // ViewPickupDeliverySolution(P, LB, UB, Solucao, "Solucao obtida.");
         PrintSolution(P, Solucao, "Solucao obtida.");
         cout << "custo: " << UB << endl;
     }

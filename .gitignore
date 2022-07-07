@@ -86,3 +86,4 @@ cmake-build-debug
 # Outputs
 *.out
 *.err
+output/
