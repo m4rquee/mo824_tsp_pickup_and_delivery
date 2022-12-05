@@ -6,7 +6,6 @@
 #include <lemon/list_graph.h>
 #include <string>
 
-int LAZY_ADD = INT32_MAX;     // saves memory by limiting the calls to addLazy
 const long unsigned seed = 42;// seed to the random number generator
 
 class SubCycleElim : public GRBCallback {
@@ -59,8 +58,7 @@ protected:
                     if (cut[P.g.source(e)] == cut[P.source] &&
                         cut[P.g.target(e)] == cut[delivery])// if is a cut crossing arc
                         expr += x_e[e];
-                addLazy(expr >= 1.0);                // eliminates this violation
-                if (++constrCount >= LAZY_ADD) break;// limit the number of added constr
+                addLazy(expr >= 1.0);// eliminates this violation
             }
 
             // From a pickup we must reach its delivery: -----------------------------
@@ -75,8 +73,7 @@ protected:
                     if (cut[P.g.source(e)] == cut[pickup] &&
                         cut[P.g.target(e)] == cut[delivery])// if is a cut crossing arc
                         expr += x_e[e];
-                addLazy(expr >= 1.0);                // eliminates this violation
-                if (++constrCount >= LAZY_ADD) break;// limit the number of added constr
+                addLazy(expr >= 1.0);// eliminates this violation
             }
         } catch (std::exception &e) {
             cout << "Error during callback: " << e.what() << endl;
@@ -120,13 +117,11 @@ bool solve(Pickup_Delivery_Instance &P, double &LB, double &UB, DNodeVector &Sol
     GRBModel model = GRBModel(*env);
     model.set(GRB_StringAttr_ModelName, "Pickup Delivery Route");
     model.set(GRB_IntAttr_ModelSense, GRB_MINIMIZE);
-    model.set(GRB_IntParam_Seed, 42);
+    model.set(GRB_IntParam_Seed, seed);
 
     // ILP solver parameters: ----------------------------------------------------
-    if (P.npairs >= 100) {// reduce memory usage
-        LAZY_ADD = 100;
+    if (P.npairs >= 50)// reduce memory usage
         model.set(GRB_IntParam_Threads, 1);
-    }
 
     if (P.npairs >= 20) {// focus only on new UBs
         model.set(GRB_IntParam_MIPFocus, GRB_MIPFOCUS_FEASIBILITY);
@@ -264,9 +259,11 @@ int main(int argc, char *argv[]) {
             cout << "custo: " << UB << endl;
         }
     } catch (std::exception &e) {
+        cout << "custo: " << UB << endl;
         cerr << "\nException: " << e.what() << endl;
         return 1;
     } catch (GRBException &e) {
+        cout << "custo: " << UB << endl;
         cerr << "\nGRBException: " << e.getMessage() << endl;
         return 1;
     }
